@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import kz.abyl.arbuz.presentation.bottom_nav.BottomNavigationBar
+import kz.abyl.arbuz.presentation.home.HomeScreen
 import kz.abyl.arbuz.ui.theme.ArbuzTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     val padding = it
-                    Greeting(name = "Test", padding = padding)
+                    HomeScreen(padding = padding)
                 }
             }
         }
