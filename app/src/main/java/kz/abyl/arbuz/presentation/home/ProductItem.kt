@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,19 +28,25 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import kz.abyl.arbuz.R
+import kz.abyl.arbuz.domain.model.Photo
 import kz.abyl.arbuz.ui.theme.Gray
 import kz.abyl.arbuz.ui.theme.Green
-import kz.abyl.arbuz.ui.theme.Purple40
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductItem(
-//    product: Product
+    photo: Photo
 ) {
+    
+    val color by remember {
+        mutableStateOf(Gray)
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -52,6 +60,10 @@ fun ProductItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
         )
+//        GlideImage(
+//            model = photo.urlRegular,
+//            contentDescription = "Photo"
+//        )
         Text(
             modifier = Modifier
                 .padding(vertical = 6.dp),
@@ -64,7 +76,7 @@ fun ProductItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(30.dp),
-            color = Gray,
+            color = color,
             shape = RoundedCornerShape(32.dp)
         ) {
             Row(
@@ -87,7 +99,7 @@ fun ProductItem(
                         .padding(end = 3.dp)
                         .height(25.dp),
                     onClick = {
-
+                        
                     }
                 ) {
                     Icon(
@@ -107,5 +119,18 @@ fun ProductItem(
 fun ProductItemPreview(
 
 ) {
-    ProductItem()
+    ProductItem(
+        Photo(
+            id = "1",
+            width = 100,
+            100,
+            "White",
+            null,
+            null,
+            10,
+            "url",
+            "",
+            ""
+        )
+    )
 }
