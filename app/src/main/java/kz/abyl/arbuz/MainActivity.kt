@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import dagger.hilt.android.AndroidEntryPoint
 import kz.abyl.arbuz.presentation.bottom_nav.BottomNavigationBar
 import kz.abyl.arbuz.presentation.home.HomeScreen
 import kz.abyl.arbuz.ui.theme.ArbuzTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,20 +38,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, padding: PaddingValues, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .padding(padding)
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Color.Green),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = name)
     }
 }
