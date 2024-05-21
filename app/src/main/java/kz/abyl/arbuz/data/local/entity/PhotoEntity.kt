@@ -16,5 +16,5 @@ data class PhotoEntity(
     val urlFull: String,
     val urlRegular: String,
     val urlSmall: String,
-    var countInBucket: Int = 0
+    var countInBucket: Int = 1
 )
