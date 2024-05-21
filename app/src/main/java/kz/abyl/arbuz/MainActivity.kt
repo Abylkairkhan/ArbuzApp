@@ -3,19 +3,11 @@ package kz.abyl.arbuz
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -33,16 +25,33 @@ class MainActivity : ComponentActivity() {
         setContent {
             ArbuzTheme {
                 val navController = rememberNavController()
+                var badgeCount by remember { mutableIntStateOf(0) }
                 Scaffold(
                     bottomBar = {
                         BottomNavigationBar(
-                            navController
+                            navController,
+                            badgeCount
                         )
                     }
                 ) { padding ->
                     NavHost(navController = navController, startDestination = "home" ) {
-                        composable("home") { HomeScreen(padding = padding) }
-                        composable("favorite") { FavoriteScreen(padding = padding) }
+                        composable("home") {
+                            HomeScreen(
+                                padding = padding,
+                                onBadgeCountChange = { newCount ->
+                                    badgeCount = newCount
+                                }
+                            )
+                        }
+                        composable("favorite") {
+                            FavoriteScreen(
+                                padding = padding,
+                                onBadgeCountChange = { newCount ->
+                                    badgeCount = newCount
+                                }
+                            )
+
+                        }
                     }
                 }
             }

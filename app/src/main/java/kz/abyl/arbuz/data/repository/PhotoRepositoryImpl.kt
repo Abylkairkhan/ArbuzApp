@@ -21,8 +21,20 @@ class PhotoRepositoryImpl @Inject constructor(
         return flow {
             emit(Resource.Loading(true))
             try {
-                val response = photoAPI.getListOfPhotos(page)
-                val photos = response.map { it.toPhoto() }
+                val responseAPI = photoAPI.getListOfPhotos(page)
+                val responseDB = photoDatabase.dao.getAllPhotos()
+
+                // Create a map of the database photos for quick lookup by ID
+                val dbPhotosMap = responseDB.associateBy { it.id }
+
+                // Map API response to Photo objects and update countInBucket field
+                val photos = responseAPI.map { apiPhoto ->
+                    val dbPhoto = dbPhotosMap[apiPhoto.id]
+                    apiPhoto.toPhoto().apply {
+                        countInBucket = dbPhoto?.countInBucket ?: 0
+                    }
+                }
+
                 emit(Resource.Success(photos))
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -66,5 +78,9 @@ class PhotoRepositoryImpl @Inject constructor(
             }
             emit(Resource.Loading(false))
         }
+    }
+
+    override suspend fun getPhotoCountFromDatabase(): Int {
+        return photoDatabase.dao.getPhotoCount()
     }
 }

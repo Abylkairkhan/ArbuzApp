@@ -31,4 +31,7 @@ interface PhotoDAO {
     @Query("SELECT * FROM photo")
     suspend fun getAllPhotos(): List<PhotoEntity>
 
+    @Query("SELECT COUNT(*) FROM photo")
+    suspend fun getPhotoCount(): Int
+
 }

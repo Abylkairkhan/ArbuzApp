@@ -26,17 +26,41 @@ class HomeViewModel @Inject constructor(
 
     init {
         getPhotos(1)
+        getPhotoCountFromDatabase()
     }
 
     fun onEvent(event: HomeScreenEvent) {
         when(event) {
-            is HomeScreenEvent.AddProductToCart -> insertPhotoToDatabase(event.photo)
+            is HomeScreenEvent.AddOrIncreaseProductToCart -> {
+                insertOrUpdatePhotoToDatabase(event.photo)
+                getPhotoCountFromDatabase()
+            }
+            is HomeScreenEvent.RemoveOrDecreaseProductToCart -> {
+                removeOrUpdatePhotoToDatabase(event.photo)
+                getPhotoCountFromDatabase()
+            }
+            is HomeScreenEvent.GetPhotoCountFromDatabase -> getPhotoCountFromDatabase()
         }
     }
 
-    private fun insertPhotoToDatabase(photo: Photo) {
+    private fun getPhotoCountFromDatabase() {
+        viewModelScope.launch {
+            val count = photoRepository.getPhotoCountFromDatabase()
+            _state.value = _state.value.copy(badgeCount = count)
+        }
+    }
+
+    private fun removeOrUpdatePhotoToDatabase(photo: Photo) {
+        viewModelScope.launch {
+            photoRepository.decreaseOrDeletePhotoToDatabase(photo)
+            getPhotoCountFromDatabase()
+        }
+    }
+
+    private fun insertOrUpdatePhotoToDatabase(photo: Photo) {
         viewModelScope.launch {
             photoRepository.insertOrUpdatePhotoToDatabase(photo)
+            getPhotoCountFromDatabase()
         }
     }
 

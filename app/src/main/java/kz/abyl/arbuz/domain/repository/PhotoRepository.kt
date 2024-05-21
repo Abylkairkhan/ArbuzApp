@@ -15,4 +15,6 @@ interface PhotoRepository {
 
     suspend fun getAllPhotosFromDatabase(): Flow<Resource<List<Photo>>>
 
+    suspend fun getPhotoCountFromDatabase(): Int
+
 }

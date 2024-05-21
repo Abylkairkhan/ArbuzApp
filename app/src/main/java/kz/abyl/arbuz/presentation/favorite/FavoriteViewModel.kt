@@ -25,6 +25,14 @@ class FavoriteViewModel @Inject constructor(
             is FavoriteScreenEvent.GetListOfPhotos -> getListOfPhotos()
             is FavoriteScreenEvent.IncreaseCountOfPhoto -> increaseCountOfPhoto(event.photo)
             is FavoriteScreenEvent.DecreaseOrDeleteCountOfPhoto -> decreaseOrDeleteCountOfPhoto(event.photo)
+            is FavoriteScreenEvent.GetPhotoCountFromDatabase -> getPhotoCountFromDatabase()
+        }
+    }
+
+    private fun getPhotoCountFromDatabase() {
+        viewModelScope.launch {
+            val count = photoRepository.getPhotoCountFromDatabase()
+            _state.value = _state.value.copy(badgeCount = count)
         }
     }
 
@@ -32,6 +40,7 @@ class FavoriteViewModel @Inject constructor(
         viewModelScope.launch {
             photoRepository.decreaseOrDeletePhotoToDatabase(photo)
             onEvent(FavoriteScreenEvent.GetListOfPhotos)
+            onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
         }
     }
 

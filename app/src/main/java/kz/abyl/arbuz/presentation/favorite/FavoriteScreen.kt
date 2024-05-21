@@ -21,6 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +40,8 @@ import kz.abyl.arbuz.ui.theme.Green
 @Composable
 fun FavoriteScreen(
     viewModel: FavoriteViewModel = hiltViewModel(),
-    padding: PaddingValues
+    padding: PaddingValues,
+    onBadgeCountChange: (Int) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -45,6 +49,14 @@ fun FavoriteScreen(
     }
 
     val state by viewModel.state.collectAsState()
+    var count by remember {
+        mutableIntStateOf(0)
+    }
+
+    LaunchedEffect(state.photos) {
+        count = state.photos.sumOf { it.countInBucket }
+        onBadgeCountChange(state.badgeCount)
+    }
 
     if (state.isLoading) {
         ProgressScreen(padding)
@@ -66,9 +78,13 @@ fun FavoriteScreen(
                     ProductItem(
                         onPlusClick = {
                             viewModel.onEvent(FavoriteScreenEvent.IncreaseCountOfPhoto(it))
+                            count = state.photos.sumOf { it.countInBucket }
+//                            viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
                         },
                         onMinusClick = {
                             viewModel.onEvent(FavoriteScreenEvent.DecreaseOrDeleteCountOfPhoto(it))
+                            count = state.photos.sumOf { it.countInBucket }
+//                            viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
                         },
                         photo = it
                     )
@@ -96,7 +112,7 @@ fun FavoriteScreen(
                         contentDescription = "Heart"
                     )
                     Text(
-                        text = "5",
+                        text = count.toString(),
                         fontFamily = FontFamily(
                             Font(R.font.redhatdisplay_bold),
                         ),
