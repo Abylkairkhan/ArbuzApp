@@ -1,16 +1,12 @@
 package kz.abyl.arbuz.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kz.abyl.arbuz.data.local.PhotoDatabase
 import kz.abyl.arbuz.domain.model.Photo
 import kz.abyl.arbuz.domain.repository.PhotoRepository
 import kz.abyl.arbuz.util.Resource
@@ -25,7 +21,6 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeScreenState> = _state.asStateFlow()
 
     init {
-        getPhotos(1)
         getPhotoCountFromDatabase()
     }
 
@@ -40,6 +35,7 @@ class HomeViewModel @Inject constructor(
                 getPhotoCountFromDatabase()
             }
             is HomeScreenEvent.GetPhotoCountFromDatabase -> getPhotoCountFromDatabase()
+            is HomeScreenEvent.GetPhotos -> getPhotos(event.page)
         }
     }
 

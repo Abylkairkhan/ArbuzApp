@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,6 +25,15 @@ fun HomeScreen(
     padding: PaddingValues,
     onBadgeCountChange: (Int) -> Unit
 ) {
+
+    var page by remember {
+        mutableIntStateOf(1)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(HomeScreenEvent.GetPhotoCountFromDatabase)
+        viewModel.onEvent(HomeScreenEvent.GetPhotos(page))
+    }
 
     val state by viewModel.state.collectAsState()
 

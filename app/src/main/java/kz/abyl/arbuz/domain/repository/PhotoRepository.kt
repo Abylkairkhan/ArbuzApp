@@ -1,7 +1,6 @@
 package kz.abyl.arbuz.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import kz.abyl.arbuz.data.local.entity.PhotoEntity
 import kz.abyl.arbuz.domain.model.Photo
 import kz.abyl.arbuz.util.Resource
 

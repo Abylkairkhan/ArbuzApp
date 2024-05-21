@@ -46,6 +46,7 @@ fun FavoriteScreen(
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(FavoriteScreenEvent.GetListOfPhotos)
+        viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
     }
 
     val state by viewModel.state.collectAsState()
@@ -54,6 +55,7 @@ fun FavoriteScreen(
     }
 
     LaunchedEffect(state.photos) {
+        viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
         count = state.photos.sumOf { it.countInBucket }
         onBadgeCountChange(state.badgeCount)
     }
@@ -79,12 +81,11 @@ fun FavoriteScreen(
                         onPlusClick = {
                             viewModel.onEvent(FavoriteScreenEvent.IncreaseCountOfPhoto(it))
                             count = state.photos.sumOf { it.countInBucket }
-//                            viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
                         },
                         onMinusClick = {
                             viewModel.onEvent(FavoriteScreenEvent.DecreaseOrDeleteCountOfPhoto(it))
                             count = state.photos.sumOf { it.countInBucket }
-//                            viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
+                            viewModel.onEvent(FavoriteScreenEvent.GetPhotoCountFromDatabase)
                         },
                         photo = it
                     )
@@ -107,7 +108,7 @@ fun FavoriteScreen(
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = R.drawable.favorite_icon_fill
+                            id = R.drawable.shopping_icon
                         ),
                         contentDescription = "Heart"
                     )

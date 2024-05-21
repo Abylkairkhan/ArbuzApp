@@ -1,5 +1,7 @@
 package kz.abyl.arbuz.presentation.bottom_nav
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Badge
@@ -12,12 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kz.abyl.arbuz.R
 
@@ -30,14 +33,14 @@ fun BottomNavigationBar(
 
     val bottomNavItems = listOf(
         BottomNavItem(
-            name = "Home",
+            name = "Главная",
             route = "home",
             selectedIcon = R.drawable.home_icon_fill,
             unselectedIcon = R.drawable.home_icon,
             badges = 0
         ),
         BottomNavItem(
-            name = "Favorite",
+            name = "Корзина",
             route = "favorite",
             selectedIcon = R.drawable.favorite_icon_fill,
             unselectedIcon = R.drawable.favorite_icon,
@@ -52,7 +55,7 @@ fun BottomNavigationBar(
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
-            .height(74.dp)
+            .height(70.dp)
     ) {
         bottomNavItems.forEachIndexed { index, bottomNavItem ->
             NavigationBarItem(
@@ -66,25 +69,31 @@ fun BottomNavigationBar(
                     }
                 },
                 icon = {
-                    BadgedBox(
-                        badge = {
-                            if (bottomNavItem.badges != 0) {
-                                Badge {
-                                    Text(text = bottomNavItem.badges.toString())
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        BadgedBox(
+                            badge = {
+                                if (bottomNavItem.badges != 0) {
+                                    Badge {
+                                        Text(text = bottomNavItem.badges.toString())
+                                    }
                                 }
                             }
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    if (index == selected) bottomNavItem.selectedIcon else bottomNavItem.unselectedIcon
+                                ),
+                                contentDescription = ""
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                if (index == selected) bottomNavItem.selectedIcon else bottomNavItem.unselectedIcon
-                            ),
-                            contentDescription = ""
+                        Text(
+                            text = bottomNavItem.name,
+                            fontSize = 12.sp
                         )
                     }
-                },
-                label = {
-                    Text(text = bottomNavItem.name)
                 }
             )
         }

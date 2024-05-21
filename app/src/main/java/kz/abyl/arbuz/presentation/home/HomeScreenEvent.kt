@@ -10,4 +10,7 @@ sealed class HomeScreenEvent {
 
     data object GetPhotoCountFromDatabase: HomeScreenEvent()
 
+    data class GetPhotos(val page: Int): HomeScreenEvent()
+
+
 }

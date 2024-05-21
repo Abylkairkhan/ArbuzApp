@@ -1,8 +1,5 @@
 package kz.abyl.arbuz.domain.model
 
-import com.squareup.moshi.Json
-import kz.abyl.arbuz.data.network.dto.UrlsDTO
-
 data class Photo(
     val id: String,
     val width: Long,

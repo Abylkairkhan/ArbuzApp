@@ -1,7 +1,6 @@
 package kz.abyl.arbuz.presentation.favorite
 
 import kz.abyl.arbuz.domain.model.Photo
-import kz.abyl.arbuz.presentation.home.HomeScreenEvent
 
 sealed class FavoriteScreenEvent {
 

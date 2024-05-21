@@ -53,7 +53,7 @@ class FavoriteViewModel @Inject constructor(
     private fun getListOfPhotos() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
-            photoRepository.getAllPhotosFromDatabase().collect() { result ->
+            photoRepository.getAllPhotosFromDatabase().collect { result ->
                 when (result) {
                     is Resource.Success -> _state.value = _state.value.copy(
                         photos = result.data ?: emptyList()
