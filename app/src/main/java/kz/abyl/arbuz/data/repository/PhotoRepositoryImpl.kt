@@ -2,6 +2,7 @@ package kz.abyl.arbuz.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kz.abyl.arbuz.data.local.PhotoDatabase
 import kz.abyl.arbuz.data.mapper.toPhoto
 import kz.abyl.arbuz.data.network.PhotoAPI
 import kz.abyl.arbuz.domain.model.Photo
@@ -12,7 +13,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
-    private val photoAPI: PhotoAPI
+    private val photoAPI: PhotoAPI,
+    private val photoDatabase: PhotoDatabase
 ): PhotoRepository {
     override suspend fun getListOfPhotos(page: Int): Flow<Resource<List<Photo>>> {
         return flow {

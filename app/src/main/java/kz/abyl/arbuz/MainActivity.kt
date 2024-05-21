@@ -16,8 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kz.abyl.arbuz.presentation.bottom_nav.BottomNavigationBar
+import kz.abyl.arbuz.presentation.favorite.FavoriteScreen
 import kz.abyl.arbuz.presentation.home.HomeScreen
 import kz.abyl.arbuz.ui.theme.ArbuzTheme
 
@@ -28,13 +32,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ArbuzTheme {
+                val navController = rememberNavController()
                 Scaffold(
                     bottomBar = {
-                        BottomNavigationBar()
+                        BottomNavigationBar(
+                            navController
+                        )
                     }
-                ) {
-                    val padding = it
-                    HomeScreen(padding = padding)
+                ) { padding ->
+                    NavHost(navController = navController, startDestination = "home" ) {
+                        composable("home") { HomeScreen(padding = padding) }
+                        composable("favorite") { FavoriteScreen(padding = padding) }
+                    }
                 }
             }
         }

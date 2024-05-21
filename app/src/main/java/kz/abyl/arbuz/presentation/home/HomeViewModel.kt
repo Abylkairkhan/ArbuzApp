@@ -1,13 +1,13 @@
 package kz.abyl.arbuz.presentation.home
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kz.abyl.arbuz.domain.repository.PhotoRepository
@@ -19,47 +19,42 @@ class HomeViewModel @Inject constructor(
     private val photoRepository: PhotoRepository
 ) : ViewModel() {
 
-    var state by mutableStateOf(HomeScreenState())
+    private val _state = MutableStateFlow(HomeScreenState())
+    val state: StateFlow<HomeScreenState> = _state.asStateFlow()
 
     init {
+        Log.d("MyLog", "init")
         getPhotos(1)
     }
 
-    private fun getPhotos(page: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            photoRepository
-                .getListOfPhotos(page)
-                .collect { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            withContext(Dispatchers.Main) {
-                                state = state.copy(
-                                    isLoading = false,
-                                    photos = result.data ?: emptyList()
-                                )
-                                Log.d("MyLog", result.data?.get(1)?.altDescription ?: "null")
-                            }
-                        }
-
-                        is Resource.Error -> {
-                            withContext(Dispatchers.Main) {
-                                state = state.copy(
-                                    isLoading = false,
-                                    error = result.message
-                                )
-                            }
-                        }
-
-                        is Resource.Loading -> {
-                            withContext(Dispatchers.Main) {
-                                state = state.copy(
-                                    isLoading = true
-                                )
-                            }
-                        }
-                    }
-                }
+    fun onEvent(event: HomeScreenEvent) {
+        when(event) {
+            is HomeScreenEvent.AddProductToCart -> {
+                Log.d("MyLog", "${event.photo.altDescription}")
+            }
         }
     }
 
+    private fun getPhotos(page: Int) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
+            photoRepository.getListOfPhotos(page).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _state.value = _state.value.copy(
+                            photos = result.data ?: emptyList()
+                        )
+                    }
+                    is Resource.Error -> {
+                        _state.value = _state.value.copy(
+                            error = result.message
+                        )
+                    }
+                    is Resource.Loading -> {
+                        _state.value = _state.value.copy(isLoading = result.isLoading)
+                    }
+                }
+            }
+        }
+    }
 }

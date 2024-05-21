@@ -1,9 +1,11 @@
-package kz.abyl.arbuz.domain.model
+package kz.abyl.arbuz.data.local.entity
 
-import com.squareup.moshi.Json
-import kz.abyl.arbuz.data.network.dto.UrlsDTO
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class Photo(
+@Entity(tableName = "photo")
+data class PhotoEntity(
+    @PrimaryKey
     val id: String,
     val width: Long,
     val height: Long,
@@ -14,6 +16,5 @@ data class Photo(
     val urlFull: String,
     val urlRegular: String,
     val urlSmall: String,
-
     var countInBucket: Int = 0
 )

@@ -14,11 +14,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kz.abyl.arbuz.R
 
 @Composable
 fun BottomNavigationBar(
-
+    navController: NavController
 ) {
 
     val bottomNavItems = listOf(
@@ -50,6 +51,11 @@ fun BottomNavigationBar(
                 selected = index == selected,
                 onClick = {
                     selected = index
+                    navController.navigate(bottomNavItem.route) {
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 icon = {
                     Icon(

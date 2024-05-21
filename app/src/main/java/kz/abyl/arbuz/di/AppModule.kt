@@ -1,10 +1,12 @@
 package kz.abyl.arbuz.di
 
 import android.app.Application
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kz.abyl.arbuz.data.local.PhotoDatabase
 import kz.abyl.arbuz.data.network.PhotoAPI
 import kz.abyl.arbuz.util.Credentials
 import okhttp3.OkHttpClient
@@ -35,13 +37,13 @@ object AppModule {
             .create()
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideStockDatabase(application: Application): StockDatabase {
-//        return Room.databaseBuilder(
-//            application,
-//            StockDatabase::class.java,
-//            "stockdb"
-//        ).build()
-//    }
+    @Provides
+    @Singleton
+    fun providePhotoDatabase(application: Application): PhotoDatabase {
+        return Room.databaseBuilder(
+            application,
+            PhotoDatabase::class.java,
+            "photo_db"
+        ).build()
+    }
 }
